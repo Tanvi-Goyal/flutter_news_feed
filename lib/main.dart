@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_news_feed/Categories.dart';
+import 'package:flutter_news_feed/SecondRoute.dart';
+
 import 'dependency_injection.dart';
 
 
@@ -10,6 +11,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -17,6 +20,7 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(primarySwatch: Colors.blue),
     );
   }
+
 }
 
 class LoginPage extends StatefulWidget {
@@ -120,132 +124,3 @@ class LoginPageState extends State<LoginPage>
   }
 }
 
-class SecondRoute extends StatefulWidget {
-  @override
-  _SecondRouteState createState() => _SecondRouteState();
-}
-
-class _SecondRouteState extends State<SecondRoute> with SingleTickerProviderStateMixin {
-
-  TabController tabController;
-  @override
-  void initState(){
-    super.initState();
-    tabController = new TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose(){
-    tabController.dispose();
-    super.dispose();
-  }
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Retrieve News"),
-      ),
-      body: new TabBarView(
-        children: <Widget>[
-          new CategoriesScreen(),
-          new LoginPage()
-        ],
-        controller: tabController,
-      ),
-      bottomNavigationBar: new Material(
-        color: Colors.teal,
-        child: new TabBar(
-          controller: tabController,
-          tabs: <Widget>[
-            new Tab(
-              icon: new Icon(Icons.new_releases),
-            ),
-            new Tab(
-              icon: new Icon(Icons.bookmark),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-//class NewsRoute extends StatefulWidget {
-//  @override
-//  NewsRouteState createState() => NewsRouteState();
-//}
-//
-//class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
-//
-//  NewsListPresenter _presenter;
-////  final String url = "https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=22920e566522494fbd2b629ad2461b8f";
-//  List data;
-//  bool _isLoading;
-//  @override
-//  void initState(){
-//    super.initState();
-//    _isLoading = true;
-//    this.getJsonData();
-//  }
-//
-//
-//  Future<String> getJsonData() async{
-//    Injector.configure(Flavour.PROD);
-////    var response = await http.get(
-////      //Encode the url
-////      Uri.encodeFull(url),
-////      headers: {"Accept": "application/json"}
-////    );
-////    print(response.body);
-////
-////    setState(() {
-////      _isLoading = false;
-////      var convertDataToJson = jsonDecode(response.body);
-////      data = convertDataToJson['articles'];
-////    });
-//
-//    return "Success";
-//  }
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return new Scaffold(
-//
-//      body: _isLoading
-//          ? new Center(
-//        child: CircularProgressIndicator(),
-//      )
-//          : new ListView.builder(
-//        itemCount: data == null ? 0:data.length,
-//        itemBuilder: (BuildContext context, int index) {
-//          return new Container(
-//            child:new Center(
-//              child: new Column(
-//                crossAxisAlignment: CrossAxisAlignment.stretch,
-//                children: <Widget>[
-//                  new Card(
-//                    child: new Container(
-//                      child: new Text(data[index]['title']),
-//                      padding: const EdgeInsets.all(20.0),
-//                    ),
-//                  )
-//                ],
-//              ),
-//            ) ,
-//          );
-//        },
-//      ),
-//    );
-//  }
-////
-//  @override
-//  void onLoadNewsComplete(List<News> items) {
-//    // TODO: implement onLoadNewsComplete
-//  }
-//
-//  @override
-//  void onLoadNewsError() {
-//    // TODO: implement onLoadNewsError
-//  }
-//}
-//

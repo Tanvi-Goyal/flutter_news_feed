@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_news_feed/data/news_data.dart';
-import 'modules/news_presenter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import 'database_helpers.dart';
+import 'modules/news_presenter.dart';
 
 class NewsRoute extends StatefulWidget {
-
   @override
   NewsRouteState createState() => NewsRouteState();
 }
 
-class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
-
+class NewsRouteState extends State<NewsRoute> implements NewsListViewContract {
   NewsListPresenter _presenter;
   List<News> _news;
 
@@ -21,8 +20,9 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
   }
 
   bool _isLoading;
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _presenter.loadNews();
     _isLoading = true;
@@ -31,16 +31,16 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-
-      body:_isLoading ? new Center(
-        child: new CircularProgressIndicator(),
-      ) : createNewsWidget()
-    );
+        body: _isLoading
+            ? new Center(
+          child: new CircularProgressIndicator(),
+        )
+            : createNewsWidget());
   }
 
-  Widget createNewsWidget(){
+  Widget createNewsWidget() {
     return new ListView.builder(
-      itemCount: _news == null ? 0:_news.length,
+      itemCount: _news == null ? 0 : _news.length,
       padding: new EdgeInsets.only(top: 50, bottom: 50, left: 10, right: 10),
       itemBuilder: (BuildContext context, int index) {
         return new GestureDetector(
@@ -62,7 +62,6 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
                           ),
                         ),
                       ),
-
                     ],
                   ),
                   new Row(
@@ -70,8 +69,7 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
                       new Expanded(
                         child: new GestureDetector(
                           child: new Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               new Padding(
                                 padding: new EdgeInsets.only(
@@ -88,9 +86,7 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
                               ),
                               new Padding(
                                 padding: new EdgeInsets.only(
-                                    left: 4.0,
-                                    right: 4.0,
-                                    bottom: 4.0),
+                                    left: 4.0, right: 4.0, bottom: 4.0),
                                 child: new Text(
                                   _news[index].description,
                                   style: new TextStyle(
@@ -122,27 +118,23 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
                             children: <Widget>[
                               new GestureDetector(
                                 child: new Padding(
-                                    padding:
-                                    new EdgeInsets.symmetric(
-                                        vertical: 10.0,
-                                        horizontal: 5.0),
-                                    child: buildButtonColumn(
-                                        Icons.share)),
+                                    padding: new EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 5.0),
+                                    child: buildButtonColumn(Icons.share)),
                                 onTap: () {
-                                  Share.share('Check out this news '+ _news[index].url);
+                                  Share.share('Check out this news ' +
+                                      _news[index].url);
 
 //                                  share(_news[index].url);
                                 },
                               ),
                               new GestureDetector(
                                 child: new Padding(
-                                    padding:
-                                    new EdgeInsets.all(5.0),
+                                    padding: new EdgeInsets.all(5.0),
                                     child: buildButtonColumn(
                                         Icons.bookmark_border)),
                                 onTap: () {
-//                                  _onBookmarkTap(
-//                                      _news[index]);
+                                  _onBookmarkTap(_news[index], context);
                                 },
                               ),
                             ],
@@ -171,38 +163,6 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
     );
   }
 
-
-  Widget newsWidget() {
-    return new Container(
-        child: new Column(
-          children: <Widget>[
-            new Flexible(
-              child: new ListView.builder(
-                itemCount: _news == null ? 0:_news.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return new Container(
-                    child:new Center(
-                      child: new Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          new Card(
-                            child: new Container(
-                              child: new Text(_news[index].title),
-                              padding: const EdgeInsets.all(20.0),
-                            ),
-                          )
-                        ],
-                      ),
-                    ) ,
-                  );
-                },
-
-              ),
-            )
-          ],
-        ));
-  }
-
   @override
   void onLoadNewsComplete(List<News> items) {
     // TODO: implement onLoadNewsComplete
@@ -211,12 +171,26 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
       _news = items;
       _isLoading = false;
     });
-
   }
 
   @override
   void onLoadNewsError() {
     // TODO: implement onLoadNewsError
   }
-}
 
+  Future _onBookmarkTap(News news, BuildContext context) async {
+    final snackBar = SnackBar(content: Text('Added to Bookmarks!'));
+    Scaffold.of(context).showSnackBar(snackBar);
+
+    News mynews = News();
+    mynews.author = news.author;
+    mynews.title = news.title;
+    mynews.description = news.description;
+    mynews.url = news.url;
+    mynews.urlToImage = news.urlToImage;
+    mynews.publishedAt = news.publishedAt;
+    DatabaseHelper helper = DatabaseHelper.instance;
+    int title = await helper.insert(mynews);
+    print('inserted row: $title');
+  }
+}
