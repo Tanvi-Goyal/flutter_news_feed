@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutter_news_feed/Categories.dart';
+import 'dependency_injection.dart';
 
 
-void main() => runApp(new MyApp());
+
+void main() async {
+  Injector.configure(Flavour.PROD);
+  runApp(new MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -99,7 +102,7 @@ class LoginPageState extends State<LoginPage>
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => NewsRoute()),
+                              MaterialPageRoute(builder: (context) => SecondRoute()),
                             );
                           },
                           splashColor: Colors.blueAccent,
@@ -117,12 +120,12 @@ class LoginPageState extends State<LoginPage>
   }
 }
 
-class NewsRoute extends StatefulWidget {
+class SecondRoute extends StatefulWidget {
   @override
-  _NewsRouteState createState() => _NewsRouteState();
+  _SecondRouteState createState() => _SecondRouteState();
 }
 
-class _NewsRouteState extends State<NewsRoute> with SingleTickerProviderStateMixin {
+class _SecondRouteState extends State<SecondRoute> with SingleTickerProviderStateMixin {
 
   TabController tabController;
   @override
@@ -144,7 +147,7 @@ class _NewsRouteState extends State<NewsRoute> with SingleTickerProviderStateMix
       ),
       body: new TabBarView(
         children: <Widget>[
-          new SecondRoute(),
+          new CategoriesScreen(),
           new LoginPage()
         ],
         controller: tabController,
@@ -167,70 +170,82 @@ class _NewsRouteState extends State<NewsRoute> with SingleTickerProviderStateMix
   }
 }
 
-class SecondRoute extends StatefulWidget {
-  @override
-  SecondRouteState createState() => SecondRouteState();
-}
-
-class SecondRouteState extends State<SecondRoute> {
-
-  final String url = "https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=22920e566522494fbd2b629ad2461b8f";
-  List data;
-  bool _isLoading;
-  @override
-  void initState(){
-    super.initState();
-    _isLoading = true;
-    this.getJsonData();
-  }
-
-
-  Future<String> getJsonData() async{
-    var response = await http.get(
-      //Encode the url
-      Uri.encodeFull(url),
-      headers: {"Accept": "application/json"}
-    );
-    print(response.body);
-
-    setState(() {
-      _isLoading = false;
-      var convertDataToJson = jsonDecode(response.body);
-      data = convertDataToJson['articles'];
-    });
-
-    return "Success";
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-
-      body: _isLoading
-          ? new Center(
-        child: CircularProgressIndicator(),
-      )
-          : new ListView.builder(
-        itemCount: data == null ? 0:data.length,
-        itemBuilder: (BuildContext context, int index) {
-          return new Container(
-            child:new Center(
-              child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  new Card(
-                    child: new Container(
-                      child: new Text(data[index]['title']),
-                      padding: const EdgeInsets.all(20.0),
-                    ),
-                  )
-                ],
-              ),
-            ) ,
-          );
-        },
-      ),
-    );
-  }
-}
-
+//class NewsRoute extends StatefulWidget {
+//  @override
+//  NewsRouteState createState() => NewsRouteState();
+//}
+//
+//class NewsRouteState extends State<NewsRoute> implements NewsListViewContract{
+//
+//  NewsListPresenter _presenter;
+////  final String url = "https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=22920e566522494fbd2b629ad2461b8f";
+//  List data;
+//  bool _isLoading;
+//  @override
+//  void initState(){
+//    super.initState();
+//    _isLoading = true;
+//    this.getJsonData();
+//  }
+//
+//
+//  Future<String> getJsonData() async{
+//    Injector.configure(Flavour.PROD);
+////    var response = await http.get(
+////      //Encode the url
+////      Uri.encodeFull(url),
+////      headers: {"Accept": "application/json"}
+////    );
+////    print(response.body);
+////
+////    setState(() {
+////      _isLoading = false;
+////      var convertDataToJson = jsonDecode(response.body);
+////      data = convertDataToJson['articles'];
+////    });
+//
+//    return "Success";
+//  }
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return new Scaffold(
+//
+//      body: _isLoading
+//          ? new Center(
+//        child: CircularProgressIndicator(),
+//      )
+//          : new ListView.builder(
+//        itemCount: data == null ? 0:data.length,
+//        itemBuilder: (BuildContext context, int index) {
+//          return new Container(
+//            child:new Center(
+//              child: new Column(
+//                crossAxisAlignment: CrossAxisAlignment.stretch,
+//                children: <Widget>[
+//                  new Card(
+//                    child: new Container(
+//                      child: new Text(data[index]['title']),
+//                      padding: const EdgeInsets.all(20.0),
+//                    ),
+//                  )
+//                ],
+//              ),
+//            ) ,
+//          );
+//        },
+//      ),
+//    );
+//  }
+////
+//  @override
+//  void onLoadNewsComplete(List<News> items) {
+//    // TODO: implement onLoadNewsComplete
+//  }
+//
+//  @override
+//  void onLoadNewsError() {
+//    // TODO: implement onLoadNewsError
+//  }
+//}
+//
