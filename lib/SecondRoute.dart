@@ -41,6 +41,7 @@ class _SecondRouteState extends State<SecondRoute>
           tabs: <Widget>[
             new Tab(
               icon: new Icon(Icons.category),
+
             ),
             new Tab(
               icon: new Icon(Icons.bookmark),

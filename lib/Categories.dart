@@ -11,22 +11,11 @@ class CategoriesScreen extends StatefulWidget {
   _CategoriesScreenState createState() => new _CategoriesScreenState();
 }
 
-class _CategoriesScreenState extends State<CategoriesScreen>
-    with SingleTickerProviderStateMixin {
-  AnimationController _iconAnimationController;
-  Animation<double> _iconAnimation;
+class _CategoriesScreenState extends State<CategoriesScreen> {
 
   @override
   void initState() {
     super.initState();
-    _iconAnimationController = new AnimationController(
-        vsync: this, duration: new Duration(milliseconds: 300));
-
-    _iconAnimation = new CurvedAnimation(
-        parent: _iconAnimationController, curve: Curves.easeOut);
-
-    _iconAnimation.addListener(() => this.setState(() {}));
-    _iconAnimationController.forward();
   }
 
   @override
@@ -80,7 +69,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                                     child: new Icon(
                                         categoriesList.list[index]
                                         ["icon"],
-                                        size: _iconAnimation.value * 30,
+                                        size: 40,
                                         color: categoriesList.list[index]
                                         ["color"]),
                                   ),

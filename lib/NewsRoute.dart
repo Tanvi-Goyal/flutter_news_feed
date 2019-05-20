@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_news_feed/data/news_data.dart';
 import 'package:share/share.dart';
@@ -15,6 +17,18 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract {
   NewsListPresenter _presenter;
   List<News> _news;
 
+  List colors = [
+    Colors.red,
+    Colors.green,
+    Colors.brown,
+    Colors.deepOrange,
+    Colors.deepPurple,
+    Colors.pink,
+    Colors.indigo
+  ];
+  Random random = new Random();
+
+
   NewsRouteState() {
     _presenter = new NewsListPresenter(this);
   }
@@ -26,6 +40,8 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract {
     super.initState();
     _presenter.loadNews();
     _isLoading = true;
+//    index = random.nextInt(3);
+
   }
 
   @override
@@ -45,6 +61,7 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract {
       itemBuilder: (BuildContext context, int index) {
         return new GestureDetector(
           child: new Card(
+            color: colors[random.nextInt(7)],
             elevation: 1.7,
             child: new Padding(
               padding: new EdgeInsets.all(10.0),
@@ -58,7 +75,7 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract {
                           _news[index].publishedAt,
                           style: new TextStyle(
                             fontWeight: FontWeight.w400,
-                            color: Colors.grey[600],
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -80,7 +97,8 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract {
                                 child: new Text(
                                   _news[index].title,
                                   style: new TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16
                                   ),
                                 ),
                               ),
@@ -90,7 +108,9 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract {
                                 child: new Text(
                                   _news[index].description,
                                   style: new TextStyle(
-                                    color: Colors.grey[500],
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    letterSpacing: 1,
                                   ),
                                 ),
                               ),
@@ -111,6 +131,7 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract {
                               child: new Image.network(
                                 _news[index].urlToImage,
                                 fit: BoxFit.cover,
+
                               ),
                             ),
                           ),
@@ -120,7 +141,9 @@ class NewsRouteState extends State<NewsRoute> implements NewsListViewContract {
                                 child: new Padding(
                                     padding: new EdgeInsets.symmetric(
                                         vertical: 10.0, horizontal: 5.0),
-                                    child: buildButtonColumn(Icons.share)),
+                                    child: buildButtonColumn(
+                                        Icons.share)
+                                ),
                                 onTap: () {
                                   Share.share('Check out this news ' +
                                       _news[index].url);

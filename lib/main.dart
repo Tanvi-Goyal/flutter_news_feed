@@ -54,26 +54,29 @@ class LoginPageState extends State<LoginPage>
         fit: StackFit.expand,
         children: <Widget>[
           new Image(
-            image: new AssetImage("assets/profile_pic.jpeg"),
+            image: new AssetImage("assets/img.jpeg"),
             fit: BoxFit.cover,
-            color: Colors.black87,
+            color: Colors.black54,
             colorBlendMode: BlendMode.darken,
           ),
           new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new FlutterLogo(
-                size: _iconAnimation.value * 100,
+              new Image(
+                image: new AssetImage("assets/news.jpeg"),
+                width: 100,
+                height: 100,
+
               ),
               new Form(
                 child: new Theme(
                   data: new ThemeData(
                     brightness: Brightness.dark,
-                    primarySwatch: Colors.teal,
+                      primarySwatch: Colors.lightBlue,
                     inputDecorationTheme: new InputDecorationTheme(
                       labelStyle: new TextStyle(
-                        color: Colors.teal,
-                        fontSize: 20.0
+                          color: Colors.white,
+                          fontSize: 16.0
                       )
                     )
                   ),

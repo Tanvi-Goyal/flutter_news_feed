@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_news_feed/data/news_data.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,15 +12,27 @@ class BookmarkScreen extends StatefulWidget {
 }
 
 class _BookmarkScreenState extends State<BookmarkScreen> {
+
+  List colors = [
+    Colors.red,
+    Colors.green,
+    Colors.brown,
+    Colors.deepOrange,
+    Colors.deepPurple,
+    Colors.pink,
+    Colors.indigo
+  ];
+  Random random = new Random();
+
   List<News> _news = new List();
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(body: createNewsWidget(_news));
+    return new Scaffold(body: createNewsWidget(_news, colors, random));
   }
 }
 
-Widget createNewsWidget(List<News> _news) {
+Widget createNewsWidget(List<News> _news, List colors, Random random) {
   print("MyNews in widget " + _news.toString());
   return FutureBuilder(
     future: _query(_news),
@@ -34,6 +48,7 @@ Widget createNewsWidget(List<News> _news) {
         itemBuilder: (BuildContext context, int index) {
           return new GestureDetector(
             child: new Card(
+              color: colors[random.nextInt(7)],
               elevation: 1.7,
               child: new Padding(
                 padding: new EdgeInsets.all(10.0),
@@ -47,7 +62,7 @@ Widget createNewsWidget(List<News> _news) {
                             content[index].publishedAt,
                             style: new TextStyle(
                               fontWeight: FontWeight.w400,
-                              color: Colors.grey[600],
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -69,7 +84,8 @@ Widget createNewsWidget(List<News> _news) {
                                   child: new Text(
                                     content[index].title,
                                     style: new TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16
                                     ),
                                   ),
                                 ),
@@ -79,7 +95,9 @@ Widget createNewsWidget(List<News> _news) {
                                   child: new Text(
                                     content[index].description,
                                     style: new TextStyle(
-                                      color: Colors.grey[500],
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      letterSpacing: 1,
                                     ),
                                   ),
                                 ),
